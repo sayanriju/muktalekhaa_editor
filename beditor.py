@@ -2,22 +2,24 @@
 # coding: utf-8
 ## beditor.py
 
-#		This file is part of Muktalekhaa : A Bangla Phonetic Text Editor for GNU/Linux Systems
-#
-#       Muktalekhaa is FREE software; you can redistribute it and/or modify
-#       it under the terms of the GNU General Public License as published by
-#       the Free Software Foundation; either version 3 of the License, or
-#       (at your option) any later version.
-#       
-#       This program is distributed in the hope that it will be useful,
-#       but WITHOUT ANY WARRANTY; without even the implied warranty of
-#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#       GNU General Public License for more details.
-#       
-#       You should have received a copy of the GNU General Public License
-#       along with this program; if not, write to the Free Software
-#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#       MA 02110-1301, USA.
+###############################################################################################
+##		Copyright 2007 Sayan "Riju" Chakrabarti <sayan.marchlinux@gmail.com>
+##
+##		This file is part of Muktalekhaa : A Bangla Phonetic Text Editor for GNU/Linux Systems
+##
+##      Muktalekhaa is FREE software; you can redistribute it and/or modify
+##      it under the terms of the GNU General Public License as published by
+##      the Free Software Foundation; either version 3 of the License, or
+##      (at your option) any later version.
+##       
+##      This program is distributed in the hope that it will be useful,
+##      but WITHOUT ANY WARRANTY; without even the implied warranty of
+##      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##      GNU General Public License for more details.
+##       
+##      You should have received a copy of the GNU General Public License
+##      along with Muktalekhaa. If not, see <http://www.gnu.org/licenses/>.
+###############################################################################################
 
 
 
@@ -26,6 +28,8 @@
 import wx
 import os
 import engine
+
+window_title = 'Muktalekhaa' + '   ->   '
 
 class Beditor(wx.Frame):
 	def __init__(self, parent, id, title):
@@ -41,42 +45,42 @@ class Beditor(wx.Frame):
 
 		file = wx.Menu()
 		new = wx.MenuItem(file, 101, '&New\tCtrl+N', 'Creates a new document')
-		new.SetBitmap(wx.Bitmap('icons/stock_new-16.png'))
+		new.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_new-16.png'))
 		file.AppendItem(new)
 
 		open = wx.MenuItem(file, 102, '&Open\tCtrl+O', 'Open an existing file')
-		open.SetBitmap(wx.Bitmap('icons/stock_open-16.png'))
+		open.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_open-16.png'))
 		file.AppendItem(open)
 		file.AppendSeparator()
 
 		save = wx.MenuItem(file, 103, '&Save\tCtrl+S', 'Save the file')
-		save.SetBitmap(wx.Bitmap('icons/stock_save-16.png'))
+		save.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_save-16.png'))
 		file.AppendItem(save)
 
 		saveas = wx.MenuItem(file, 104, 'Save &As...\tShift+Ctrl+S', 'Save the file with a different name')
-		saveas.SetBitmap(wx.Bitmap('icons/stock_save_as-16.png'))
+		saveas.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_save_as-16.png'))
 		file.AppendItem(saveas)
 		file.AppendSeparator()
 
 		quit = wx.MenuItem(file, 105, '&Quit\tCtrl+Q', 'Quit the Application')
-		quit.SetBitmap(wx.Bitmap('icons/stock_exit-16.png'))
+		quit.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_exit-16.png'))
 		file.AppendItem(quit)
 
 		edit = wx.Menu()
 		cut = wx.MenuItem(edit, 106, '&Cut\tCtrl+X', 'Cut the Selection')
-		cut.SetBitmap(wx.Bitmap('icons/stock_cut-16.png'))
+		cut.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_cut-16.png'))
 		edit.AppendItem(cut)
 
 		copy = wx.MenuItem(edit, 107, '&Copy\tCtrl+C', 'Copy the Selection')
-		copy.SetBitmap(wx.Bitmap('icons/stock_copy-16.png'))
+		copy.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_copy-16.png'))
 		edit.AppendItem(copy)
 
 		paste = wx.MenuItem(edit, 108, '&Paste\tCtrl+V', 'Paste text from clipboard')
-		paste.SetBitmap(wx.Bitmap('icons/stock_paste-16.png'))
+		paste.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_paste-16.png'))
 		edit.AppendItem(paste)
 
 		delete = wx.MenuItem(edit, 109, '&Delete', 'Delete the selected text')
-		delete.SetBitmap(wx.Bitmap('icons/stock_delete-16.png',))
+		delete.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_delete-16.png',))
 
 		edit.AppendItem(delete)
 		edit.AppendSeparator()
@@ -90,17 +94,17 @@ class Beditor(wx.Frame):
 		view.AppendSeparator()
 		
 		fontsel = wx.MenuItem(view, 501, '&Select Font', 'Select Font to use in the current document')
-		fontsel.SetBitmap(wx.Bitmap('icons/fontsel.png'))
+		fontsel.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/fontsel.png'))
 		view.AppendItem(fontsel)
 
 
 		help = wx.Menu()
 		about = wx.MenuItem(help, 112, '&About', 'About Editor')
-		about.SetBitmap(wx.Bitmap('icons/stock_about-16.png'))
+		about.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_about-16.png'))
 		help.AppendItem(about)
 		
 		layout_help = wx.MenuItem(help, 502, '&Layout Help\tF1', 'Get Help on Key Layout')
-		layout_help.SetBitmap(wx.Bitmap('icons/help-16.png'))
+		layout_help.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/help-16.png'))
 		help.AppendItem(layout_help)		
 
 
@@ -128,22 +132,22 @@ class Beditor(wx.Frame):
 		
 		# setting up toolbar
 		self.toolbar = self.CreateToolBar( wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT | wx.TB_TEXT )
-		self.toolbar.AddSimpleTool(801, wx.Bitmap('icons/document-new.png'), 'New', '')
-		self.toolbar.AddSimpleTool(802, wx.Bitmap('icons/document-open.png'), 'Open', '')
-		self.toolbar.AddSimpleTool(803, wx.Bitmap('icons/document-save.png'), 'Save', '')
+		self.toolbar.AddSimpleTool(801, wx.Bitmap('/usr/share/muktalekhaa/icons/document-new.png'), 'New', '')
+		self.toolbar.AddSimpleTool(802, wx.Bitmap('/usr/share/muktalekhaa/icons/document-open.png'), 'Open', '')
+		self.toolbar.AddSimpleTool(803, wx.Bitmap('/usr/share/muktalekhaa/icons/document-save.png'), 'Save', '')
 		self.toolbar.AddSeparator()
 
-		self.toolbar.AddSimpleTool(804, wx.Bitmap('icons/edit-cut.png'), 'Cut', '')
-		self.toolbar.AddSimpleTool(805, wx.Bitmap('icons/edit-copy.png'), 'Copy', '')
-		self.toolbar.AddSimpleTool(806, wx.Bitmap('icons/edit-paste.png'), 'Paste', '')
+		self.toolbar.AddSimpleTool(804, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-cut.png'), 'Cut', '')
+		self.toolbar.AddSimpleTool(805, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-copy.png'), 'Copy', '')
+		self.toolbar.AddSimpleTool(806, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-paste.png'), 'Paste', '')
 		self.toolbar.AddSeparator()
 
-		self.toolbar.AddSimpleTool(501, wx.Bitmap('icons/fontsel-22.png'), 'Select Font', '')
-		self.toolbar.AddSimpleTool(502, wx.Bitmap('icons/help.png'), 'Layout Help', '')
+		self.toolbar.AddSimpleTool(501, wx.Bitmap('/usr/share/muktalekhaa/icons/fontsel-22.png'), 'Select Font', '')
+		self.toolbar.AddSimpleTool(502, wx.Bitmap('/usr/share/muktalekhaa/icons/help.png'), 'Layout Help', '')
 		
 		self.toolbar.AddSeparator()
 		
-		self.toolbar.AddSimpleTool(807, wx.Bitmap('icons/process-stop.png'), 'Exit', '')
+		self.toolbar.AddSimpleTool(807, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'), 'Exit', '')
 		
 		self.toolbar.Realize()
 
@@ -172,7 +176,7 @@ class Beditor(wx.Frame):
 		self.Show(True)
 
 	def NewApplication(self, event):
-		editor = Beditor(None, -1, 'Muktalekhaa (মুক্তলেখা )')
+		editor = Beditor(None, -1, window_title + '[Untitled]'  )
 		editor.Centre()
 		editor.Show()
 
@@ -210,6 +214,7 @@ class Beditor(wx.Frame):
 				self.last_name_saved = path
 				self.statusbar.SetStatusText('', 1)
 				self.modify = False
+				self.SetTitle(window_title + path)
 
 			except IOError, error:
 				dlg = wx.MessageDialog(self, 'Error opening file\n' + str(error))
@@ -220,7 +225,6 @@ class Beditor(wx.Frame):
 				dlg.ShowModal()
 
 		open_dlg.Destroy()
-
 	def OnSaveFile(self, event):
 		if self.last_name_saved:
 
@@ -256,7 +260,7 @@ class Beditor(wx.Frame):
 				self.statusbar.SetStatusText(self.last_name_saved + ' saved', 0)
 				self.modify = False
 				self.statusbar.SetStatusText('', 1)
-
+				self.SetTitle(window_title + path)
 			except IOError, error:
 				dlg = wx.MessageDialog(self, 'Error saving file\n' + str(error))
 				dlg.ShowModal()
@@ -330,18 +334,44 @@ class Beditor(wx.Frame):
 	def LayoutHelp(self, event):
 		info = wx.AboutDialogInfo()
 
-		info.SetIcon(wx.Icon('icons/muktolekha.png', wx.BITMAP_TYPE_PNG))
+		info.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/muktolekha.png', wx.BITMAP_TYPE_PNG))
 		info.SetName('Layout')
 		wx.AboutBox(info)
 
 
 	def OnAbout(self, event):
-		dlg = wx.MessageDialog(self, '\t\tBeditor\t\n A Phonetic Text Editor for Bangla\n\n(Pre-Release Alpha Version)',
-								'About Beditor', wx.OK | wx.ICON_INFORMATION)
-		dlg.ShowModal()
-		dlg.Destroy()
+
+		description = """গনুহ/লিনাক্সে ফোনেটিক বাংলা লেখার মুক্ত সফটওয়ার  """ """\n A Bangla Phonetic Text Editor for GNU/Linux systems\n"""
+
+		licence = """ 
+		Muktalekhaa is FREE software; you can redistribute it and/or modify it
+		under the terms of the GNU General Public License as published by the Free Software Foundation; 
+		either version 3 of the License, or (at your option) any later version.
 		
-	###
+		Muktalekhaa is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+		without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+		See the GNU General Public License for more details. You should have received a copy of 
+		the GNU General Public License along with File Hunter; if not, write to 
+		the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  0211"""
+
+		info = wx.AboutDialogInfo()
+		
+		info.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/logo.png', wx.BITMAP_TYPE_PNG))
+		info.SetName('Muktalekhaa ')
+		info.SetVersion('1.0')
+		info.SetDescription(description)
+		info.SetCopyright('(C) 2007 Sayan \"Riju\" Chakrabarti <sayan.marchlinux@gmail.com>')
+		info.SetWebSite('http://code.google.com/p/muktalekhaa/')
+		info.SetLicence(licence)
+		info.AddDeveloper('Sayan \"Riju\" Chakrabarti')
+		info.AddDocWriter('Shamik Ghosh')
+		info.AddArtist('The Tango crew :-)')
+				
+		info.SetName('Muktalekhaa')
+		wx.AboutBox(info)
+		
+		
+	
 	def FontSel(self, event):
 		default_font = wx.Font(14, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "")
 		data = wx.FontData()
@@ -383,5 +413,5 @@ class Beditor(wx.Frame):
 
 
 app = wx.App()
-Beditor(None, -1, 'Muktalekhaa (মুক্তলেখা )')
+Beditor(None, -1, window_title + '[Untitled]')
 app.MainLoop()

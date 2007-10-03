@@ -1,0 +1,37 @@
+Muktalekhaa
+Version : 1.0
+Author : Sayan "Riju" Chakrabarti <sayan.marchlinux@gmail.com>
+Website : http://code.google.com/p/muktalekhaa/
+License: GPL ver 3
+Date: October, 2007
+
+Description: 	Muktalekhaa is a simple Text Editor to enable Phonetic typing in the Bangla (Bengali) language for users of GNU/Linux systems. It is written in Python and uses the Wxpython toolkit for the GUI. 
+
+Basic Usage :	It is very easy and totally intuitive to use Muktalekhaa. You keep typing words using your normal keyboard, and it will automatically be transliterated to Bangla. No need to remember complicated Bengali Keyboard layouts.
+e.g. 'aami baanglaay gaan gaai' will become 'আমি বাংলায় গান গাই'
+
+In general, the auto-transliteration occurs dynamically after you finish typing each word. While editing previous words, you'll have to return to the end of the entire text and then press SPACE to convert.
+If you want to know which key combination does what, just press F1 for help!
+
+
+Installation:	 Please consult the INSTALL file in this directory.
+
+
+Drawbacks/Future Plans : 
+  
+ * Right now, you cannot mix english and bengali letters in the documents. This might be 'resolved' in future versions of Muktalekhaa.
+ 
+ * There are no Undo/Redo options.
+ 
+ * Hiding the toolbar doesn't really work as it just hides the toolbar icons. This can be looked upon as a bug, but it might well be a direct result of the programmer's lack of expreience with wxpython! ;-)
+ 
+ * There is no way to implement Find/Replace text.
+
+------------------------------------------------------------------
+
+ 
+ Thank You for trying Muktalekhaa.
+ 
+ If you have found it to be useful, please mail comments/suggestions/encouragements/criticisms, etc to me at 
+	sayan.marchlinux@gmail.com
+ 

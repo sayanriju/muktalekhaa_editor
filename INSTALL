@@ -1,0 +1,52 @@
+################################
+Installation Instructions for 
+	Muktalekhaa
+	
+A Bangla Phonetic Text Editor
+	for GNU/Linux
+	  Systems
+################################
+
+Current Version : 1.0
+License: GPL ver 3
+
+
+Dependencies:
+---------------------------
+
+1) python 2.5.* or later.
+2) wxpython 2.8.* or later
+N.B. In some distros (like Ubuntu) this package is called python-wxgtk2.8
+3) Atleast one bangla unicode font
+
+Make sure ALL the above dependencies are installed in your system. Most distros provide their binary packages, so use the default package manager to install them.
+Otherwise, go to their respective websites and download and compile them from source.
+
+Python : http://python.org/
+wxPython : http://wxpython.org/
+Bangla Fonts: http://ekushey.org/ , http://www.bengalinux.org/
+
+Remember, the installer script doesn't attempt to resolve/check dependencies, so in case they are not installed, Muktalekhaa will simply fail to start, spitting out error messeges.
+
+
+
+Installing Muktalekhaa
+------------------------------
+
+ * Download the source tarball from  http://code.google.com/p/muktalekhaa/downloads/list
+ * Untar it : tar -xvvf muktalekhaa-1.0.tar.gz
+ * Change directory : cd muktalekhaa
+ * Run installer script as ROOT: sudo ./installer
+ (if sudo is not configured on your system, do a 'su' to become root, and then run     
+ './installer')
+ * This should have installed Muktalekhaa under /usr/share/muktalekhaa
+ * To run the program, issue the command 'muktalekhaa' w/o quotes from a terminal.
+
+--------------------------------
+ 
+ 
+ Thank You for trying Muktalekhaa.
+ 
+ If you have found it to be useful, please mail comments, suggestions, encouragements, criticisms, etc to me at 
+	sayan.marchlinux@gmail.com
+	  

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+RUNUSER=`id -nu`
+
+if [ "$RUNUSER" != "root" ]   
+    then
+    echo "This script must be executed as root"
+    exit 1
+else
+	 
+	 cp -R ../muktalekhaa/ /usr/share/
+	 mv -v /usr/share/muktalekhaa/muktalekhaa.run /usr/bin/muktalekhaa
+	 echo "----------------------------------------"
+	 echo "Muktalekhaa is successfully installed under /usr/share/muktalekhaa"
+	 echo "You should now be able to run it using the command muktalekhaa"
+fi
