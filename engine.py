@@ -51,7 +51,7 @@ def roman2beng(intext):
 	
 	intext = mreplace(intext, 'tw', 'W');  ## khandyot twa
 	intext = mreplace(intext, 'ng', 'M');  ## ং
-	intext = mreplace(intext, 'nG', 'Ga'); ## ঙ
+	intext = mreplace(intext, 'nG', 'G'); ## ঙ
 	intext = mreplace(intext, 'NG', 'J');  ## ঞ
 	intext = mreplace(intext, 'NJ', 'J')   ## " "
 	intext = mreplace(intext, 'z', 'Y');   ## য
