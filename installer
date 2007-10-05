@@ -8,8 +8,10 @@ if [ "$RUNUSER" != "root" ]
     exit 1
 else
 	 
-	 cp -R ../muktalekhaa/ /usr/share/
+	 cp -Rv ../muktalekhaa/ /usr/share/
 	 mv -v /usr/share/muktalekhaa/muktalekhaa.run /usr/bin/muktalekhaa
+	 cp -v /usr/share/muktalekhaa/muktalekhaa.desktop /usr/share/applications
+	 echo "  "
 	 echo "----------------------------------------"
 	 echo "Muktalekhaa is successfully installed under /usr/share/muktalekhaa"
 	 echo "You should now be able to run it using the command muktalekhaa"

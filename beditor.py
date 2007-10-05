@@ -164,7 +164,6 @@ class Beditor(wx.Frame):
 		self.text.SetFont(wx.Font(14, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, ""))
 		self.text.Bind(wx.EVT_TEXT, self.OnTextChanged, id=1000)
 		self.text.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-		#####
 		self.text.Bind(wx.EVT_CHAR, self.conv)
 		
 
@@ -351,7 +350,7 @@ class Beditor(wx.Frame):
 		Muktalekhaa is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 		without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 		See the GNU General Public License for more details. You should have received a copy of 
-		the GNU General Public License along with File Hunter; if not, write to 
+		the GNU General Public License along with Muktalekhaa; if not, write to 
 		the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  0211"""
 
 		info = wx.AboutDialogInfo()
@@ -390,25 +389,15 @@ class Beditor(wx.Frame):
 	
 	###### converting to bangla using engine  ##########
 	def conv(self, event):
+		## New Algorithm for Ver 1.1
 		keycode = event.GetKeyCode()
-		input = self.text.GetValue()
-		if keycode == wx.WXK_SPACE:
-			if self.text.GetInsertionPoint() != self.text.GetLastPosition():
-				self.statusbar.SetStatusText("EDIT MODE: Go to end of text and then press SPACE to convert",0)
-				self.text.WriteText(' ')
 				
-			else:
-				wordlist = input.split(' ')
-				last_word = wordlist[-1]
-				self.text.Clear()
-				for word in wordlist:
-					self.text.AppendText(engine.roman2beng(word.encode('utf-8')+' '))
-					self.statusbar.SetStatusText("",0)
+		if keycode == wx.WXK_SPACE:
+			cur_word = self.text.GetRange(0, self.text.GetInsertionPoint())  ## cur_word  = current word
+			self.text.Replace(0, self.text.GetInsertionPoint(), engine.roman2beng(cur_word.encode('utf-8')+' '))		
 		else:
 			event.Skip()
-			
-			
-		
+					
 		
 
 

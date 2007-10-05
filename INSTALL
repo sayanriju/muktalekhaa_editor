@@ -34,7 +34,7 @@ Installing Muktalekhaa
 ------------------------------
 
  * Download the source tarball from  http://code.google.com/p/muktalekhaa/downloads/list
- * Untar it : tar -xvvf muktalekhaa-1.0.tar.gz
+ * Untar it : tar -xvvf muktalekhaa-editor-1.0.tar.gz
  * Change directory : cd muktalekhaa
  * Run installer script as ROOT: sudo ./installer
  (if sudo is not configured on your system, do a 'su' to become root, and then run     
