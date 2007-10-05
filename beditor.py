@@ -29,11 +29,13 @@ import wx
 import os
 import engine
 
-window_title = 'Muktalekhaa' + '   ->   '
+window_title = 'Muktalekhaa' + ' ->  '
 
 class Beditor(wx.Frame):
 	def __init__(self, parent, id, title):
 		wx.Frame.__init__(self, parent, id, title, size=(600,400))
+		
+		self.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/icon.png', wx.BITMAP_TYPE_PNG))
 
 		# variables
 		self.modify = False
