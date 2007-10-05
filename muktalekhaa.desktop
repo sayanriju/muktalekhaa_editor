@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Muktalekhaa
+Name[bn]=মুক্তলেখা
+Name[bn_IN]=মুক্তলেখা
+Exec=muktalekhaa %U
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=text/plain;
+Icon=/usr/share/muktalekhaa/icons/icon.png
+Categories=GNOME;KDE;XFCE;GTK;Utility;TextEditor;
