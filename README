@@ -1,5 +1,5 @@
 Muktalekhaa
-Version : 1.0
+Version : 1.3+
 Author : Sayan "Riju" Chakrabarti <sayan.marchlinux@gmail.com>
 Website : http://code.google.com/p/muktalekhaa/
 License: GPL ver 3
@@ -10,8 +10,8 @@ Description: 	Muktalekhaa is a simple Text Editor to enable Phonetic typing in t
 Basic Usage :	It is very easy and totally intuitive to use Muktalekhaa. You keep typing words using your normal keyboard, and it will automatically be transliterated to Bangla. No need to remember complicated Bengali Keyboard layouts.
 e.g. 'aami baanglaay gaan gaai' will become 'আমি বাংলায় গান গাই'
 
-In general, the auto-transliteration occurs dynamically after you finish typing each word. While editing previous words, you'll have to return to the end of the entire text and then press SPACE to convert.
-If you want to know which key combination does what, just press F1 for help!
+In general, the auto-transliteration occurs dynamically as soon as you press the SPACE after finishing the typing of each word. 
+If you want to know which key combination does what, just press F1 for help on layout!
 
 
 Installation:	 Please consult the INSTALL file in this directory.

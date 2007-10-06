@@ -89,16 +89,17 @@ class Beditor(wx.Frame):
 		edit.Append(110, 'Select &All\tCtrl+A', 'Select the entire text')
 
 		view = wx.Menu()
-		view.Append(111, '&Statusbar', 'Hide/Show StatusBar')
-		view.Append(503, '&Toolbar', 'Hide/Show ToolBar')
-		
-		
+		view.Append(111, 'Toggle &Statusbar', 'Hide/Show StatusBar')
+			
 		view.AppendSeparator()
 		
-		fontsel = wx.MenuItem(view, 501, '&Select Font', 'Select Font to use in the current document')
+		fontsel = wx.MenuItem(view, 501, 'Select &Font', 'Select Font to use in the current document')
 		fontsel.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/fontsel.png'))
 		view.AppendItem(fontsel)
 
+		view.AppendSeparator()
+		
+		self.convert = view.Append(503, '&Halt Conversion\tF11', 'Stops the conversion to Bangla for the timebeing', kind = wx.ITEM_CHECK)      
 
 		help = wx.Menu()
 		about = wx.MenuItem(help, 112, '&About', 'About Editor')
@@ -112,7 +113,7 @@ class Beditor(wx.Frame):
 
 		menubar.Append(file, '&File')
 		menubar.Append(edit, '&Edit')
-		menubar.Append(view, '&View')
+		menubar.Append(view, '&Preferences')
 		menubar.Append(help, '&Help')
 		self.SetMenuBar(menubar)
 
@@ -130,7 +131,7 @@ class Beditor(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.OnAbout, id=112)
 		self.Bind(wx.EVT_MENU, self.FontSel, id=501)
 		self.Bind(wx.EVT_MENU, self.LayoutHelp, id=502)
-		self.Bind(wx.EVT_MENU, self.ToggleToolbar, id=503)
+				
 		
 		# setting up toolbar
 		self.toolbar = self.CreateToolBar( wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT | wx.TB_TEXT )
@@ -150,6 +151,10 @@ class Beditor(wx.Frame):
 		self.toolbar.AddSeparator()
 		
 		self.toolbar.AddSimpleTool(807, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'), 'Exit', '')
+		
+		self.toolbar.AddSeparator()
+		
+		#self.toolbar.AddCheckTool(504, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'))
 		
 		self.toolbar.Realize()
 
@@ -320,12 +325,6 @@ class Beditor(wx.Frame):
 			self.statusbar.Hide()
 		else:
 			self.statusbar.Show()
-			
-	def ToggleToolbar(self, event):
-		if self.toolbar.IsShown():
-			self.toolbar.Hide()
-		else:
-			self.toolbar.Show()
 
 	def StatusBar(self):
 		self.statusbar = self.CreateStatusBar()
@@ -391,15 +390,23 @@ class Beditor(wx.Frame):
 	
 	###### converting to bangla using engine  ##########
 	def conv(self, event):
-		## New Algorithm for Ver 1.1
+		## New Algorithm for Ver 1.2
 		keycode = event.GetKeyCode()
 				
 		if keycode == wx.WXK_SPACE:
-			cur_word = self.text.GetRange(0, self.text.GetInsertionPoint())  ## cur_word  = current word
-			self.text.Replace(0, self.text.GetInsertionPoint(), engine.roman2beng(cur_word.encode('utf-8')+' '))		
-		else:
-			event.Skip()
-					
+			text = self.text.GetRange(0, self.text.GetInsertionPoint())
+			wordlist = text.split(' ')
+			cur_word = ' ' + wordlist[-1]		## cur_word = current word
+			sow = text.rfind(' ')	## sow = start of word (caret position)
+			
+			if sow == -1:			## you are at the start of document, so remove the initial space
+				sow = 0
+				cur_word = cur_word[1:]
+			
+			if not self.convert.IsChecked():
+				self.text.Replace(sow, self.text.GetInsertionPoint(), engine.roman2beng(cur_word.encode('utf-8') ))
+			
+		event.Skip()			
 		
 
 
