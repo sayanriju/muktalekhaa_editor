@@ -152,11 +152,11 @@ class Beditor(wx.Frame):
 		
 		self.toolbar.AddSeparator()
 		
-		self.toolbar.AddSimpleTool(807, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'), 'Exit', '')
+		self.toolbar.AddCheckTool(504, wx.Bitmap('/usr/share/muktalekhaa/icons/M2.png'),shortHelp='Halt Conversion (F11)',longHelp='If active, stops the conversion to Bangla for current word(s)')
 		
 		self.toolbar.AddSeparator()
 		
-		self.toolbar.AddCheckTool(504, wx.Bitmap('/usr/share/muktalekhaa/icons/M2.png'),shortHelp='Halt Conversion (F11)',longHelp='If active, stops the conversion to Bangla for current word(s)')
+		self.toolbar.AddSimpleTool(807, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'), 'Exit', '')
 		
 		self.toolbar.Realize()
 
@@ -408,9 +408,11 @@ class Beditor(wx.Frame):
 		
 	def PreviewConv(self, event):
 		keycode = event.GetKeyCode()
-		key = chr(keycode)
+		
+		
 		if not self.convert.IsChecked():
 			if 32 < keycode <= 126:
+				key = chr(keycode)
 				self.word += key
 				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)
 			elif keycode == wx.WXK_SPACE:
@@ -423,11 +425,11 @@ class Beditor(wx.Frame):
 				sow = text.rfind(' ')	## sow = start of word (caret position)
 					
 				if sow == -1:			## you are at the start of document, so remove the initial space
-					sow = 0
+					sow = 0		
 					
 				self.word = self.text.GetRange(sow, self.text.GetInsertionPoint()-1)
 				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)	
-		
+
 		else:
 			self.statusbar.SetStatusText('',0)
 			self.word = ''
@@ -451,9 +453,8 @@ class Beditor(wx.Frame):
 			
 			if not self.convert.IsChecked():
 				self.text.Replace(sow, self.text.GetInsertionPoint(), engine.roman2beng(cur_word.encode('utf-8') ))
-				
-		
-		
+	
+	
 		event.Skip()
 		
 
