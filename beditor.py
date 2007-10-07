@@ -418,6 +418,10 @@ class Beditor(wx.Frame):
 			elif keycode == wx.WXK_SPACE:
 				self.statusbar.SetStatusText('',0)
 				self.word = ''
+			elif keycode == wx.WXK_HOME or keycode == wx.WXK_END:
+				self.statusbar.SetStatusText('',0)
+				self.word = ''
+				
 			else:
 				event.Skip()
 				text = self.text.GetRange(0, self.text.GetInsertionPoint()-1)
@@ -428,7 +432,8 @@ class Beditor(wx.Frame):
 					sow = 0		
 					
 				self.word = self.text.GetRange(sow, self.text.GetInsertionPoint()-1)
-				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)	
+				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)
+				
 
 		else:
 			self.statusbar.SetStatusText('',0)
