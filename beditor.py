@@ -37,12 +37,13 @@ class Beditor(wx.Frame):
 		
 		self.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/icon.png', wx.BITMAP_TYPE_PNG))
 
-		# variables
+		## variables
 		self.modify = False
 		self.last_name_saved = ''
 		self.replace = False
+		self.word = ''
 
-		# setting up menubar
+		## setting up menubar
 		menubar = wx.MenuBar()
 
 		file = wx.Menu()
@@ -99,7 +100,7 @@ class Beditor(wx.Frame):
 
 		view.AppendSeparator()
 		
-		self.convert = view.Append(503, '&Halt Conversion\tF11', 'Stops the conversion to Bangla for the timebeing', kind = wx.ITEM_CHECK)      
+		self.convert = view.Append(503, '&Halt Conversion\tF11', 'Stops the conversion to Bangla for the current word(s)', kind = wx.ITEM_CHECK)      
 
 		help = wx.Menu()
 		about = wx.MenuItem(help, 112, '&About', 'About Editor')
@@ -131,9 +132,10 @@ class Beditor(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.OnAbout, id=112)
 		self.Bind(wx.EVT_MENU, self.FontSel, id=501)
 		self.Bind(wx.EVT_MENU, self.LayoutHelp, id=502)
+		self.Bind(wx.EVT_MENU, self.ToggleConvInToolbar, id=503)
 				
 		
-		# setting up toolbar
+		## setting up toolbar
 		self.toolbar = self.CreateToolBar( wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT | wx.TB_TEXT )
 		self.toolbar.AddSimpleTool(801, wx.Bitmap('/usr/share/muktalekhaa/icons/document-new.png'), 'New', '')
 		self.toolbar.AddSimpleTool(802, wx.Bitmap('/usr/share/muktalekhaa/icons/document-open.png'), 'Open', '')
@@ -154,7 +156,7 @@ class Beditor(wx.Frame):
 		
 		self.toolbar.AddSeparator()
 		
-		#self.toolbar.AddCheckTool(504, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'))
+		self.toolbar.AddCheckTool(504, wx.Bitmap('/usr/share/muktalekhaa/icons/M2.png'),shortHelp='Halt Conversion (F11)',longHelp='If active, stops the conversion to Bangla for current word(s)')
 		
 		self.toolbar.Realize()
 
@@ -165,13 +167,17 @@ class Beditor(wx.Frame):
 		self.Bind(wx.EVT_TOOL, self.OnCopy, id=805)
 		self.Bind(wx.EVT_TOOL, self.OnPaste, id=806)
 		self.Bind(wx.EVT_TOOL, self.QuitApplication, id=807)
-
+		self.Bind(wx.EVT_TOOL, self.ToggleConvInMenu, id=504)
+		
+		
+		## setting up the text ctrl
 		self.text = wx.TextCtrl(self, 1000, '', size=(-1, -1), style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER)
 		self.text.SetFocus()
 		self.text.SetFont(wx.Font(14, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, ""))
 		self.text.Bind(wx.EVT_TEXT, self.OnTextChanged, id=1000)
 		self.text.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 		self.text.Bind(wx.EVT_CHAR, self.conv)
+		self.text.Bind(wx.EVT_CHAR, self.PreviewConv)
 		
 
 		self.Bind(wx.EVT_CLOSE, self.QuitApplication)
@@ -181,6 +187,7 @@ class Beditor(wx.Frame):
 		self.Centre()
 		self.Show(True)
 
+	## Class Methods
 	def NewApplication(self, event):
 		editor = Beditor(None, -1, window_title + '[Untitled]'  )
 		editor.Centre()
@@ -337,6 +344,17 @@ class Beditor(wx.Frame):
 		info.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/muktolekha.png', wx.BITMAP_TYPE_PNG))
 		info.SetName('Layout')
 		wx.AboutBox(info)
+		
+	def ToggleConvInToolbar(self, event):
+		if self.convert.IsChecked():
+			toggle = True
+		else:
+			toggle = False
+		
+		self.toolbar.ToggleTool(504, toggle)
+		
+	def ToggleConvInMenu(self, event):
+		self.convert.Toggle()
 
 
 	def OnAbout(self, event):
@@ -387,6 +405,34 @@ class Beditor(wx.Frame):
 			text = 'Face: %s, Size: %d, Color: %s' % (font.GetFaceName(), font.GetPointSize(),  color.Get())
 			self.text.SetFont(font)
 		dlg.Destroy()
+		
+	def PreviewConv(self, event):
+		keycode = event.GetKeyCode()
+		key = chr(keycode)
+		if not self.convert.IsChecked():
+			if 32 < keycode <= 126:
+				self.word += key
+				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)
+			elif keycode == wx.WXK_SPACE:
+				self.statusbar.SetStatusText('',0)
+				self.word = ''
+			else:
+				event.Skip()
+				text = self.text.GetRange(0, self.text.GetInsertionPoint()-1)
+				
+				sow = text.rfind(' ')	## sow = start of word (caret position)
+					
+				if sow == -1:			## you are at the start of document, so remove the initial space
+					sow = 0
+					
+				self.word = self.text.GetRange(sow, self.text.GetInsertionPoint()-1)
+				self.statusbar.SetStatusText(engine.roman2beng(self.word.encode('utf-8')),0)	
+		
+		else:
+			self.statusbar.SetStatusText('',0)
+			self.word = ''
+			
+		event.Skip()
 	
 	###### converting to bangla using engine  ##########
 	def conv(self, event):
@@ -405,8 +451,10 @@ class Beditor(wx.Frame):
 			
 			if not self.convert.IsChecked():
 				self.text.Replace(sow, self.text.GetInsertionPoint(), engine.roman2beng(cur_word.encode('utf-8') ))
-			
-		event.Skip()			
+				
+		
+		
+		event.Skip()
 		
 
 
