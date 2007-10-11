@@ -31,6 +31,10 @@ import engine
 
 window_title = 'Muktalekhaa' + ' ->  '
 
+stockUndo = ['']
+stockRedo = []
+depth = 10			## Default Undo-Redo Depth
+
 class Beditor(wx.Frame):
 	def __init__(self, parent, id, title):
 		wx.Frame.__init__(self, parent, id, title, size=(600,400))
@@ -87,6 +91,17 @@ class Beditor(wx.Frame):
 
 		edit.AppendItem(delete)
 		edit.AppendSeparator()
+		
+		undo = wx.MenuItem(edit, 113, '&Undo\tCtrl+Z','Undo last change')
+		undo.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/undo-menu.png'))
+		redo = wx.MenuItem(edit, 114, '&Redo\tCtrl+Y', 'Redo last Undo')
+		redo.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/redo-menu.png'))
+
+		edit.AppendItem(undo)
+		edit.AppendItem(redo)
+		
+		edit.AppendSeparator()
+		
 		edit.Append(110, 'Select &All\tCtrl+A', 'Select the entire text')
 
 		view = wx.Menu()
@@ -103,7 +118,7 @@ class Beditor(wx.Frame):
 		self.convert = view.Append(503, '&Halt Conversion\tF11', 'Stops the conversion to Bangla for the current word(s)', kind = wx.ITEM_CHECK)      
 
 		help = wx.Menu()
-		about = wx.MenuItem(help, 112, '&About', 'About Editor')
+		about = wx.MenuItem(help, 112, '&About', 'About Muktalekhaa')
 		about.SetBitmap(wx.Bitmap('/usr/share/muktalekhaa/icons/stock_about-16.png'))
 		help.AppendItem(about)
 		
@@ -127,6 +142,8 @@ class Beditor(wx.Frame):
 		self.Bind(wx.EVT_MENU, self.OnCopy, id=107)
 		self.Bind(wx.EVT_MENU, self.OnPaste, id=108)
 		self.Bind(wx.EVT_MENU, self.OnDelete, id=109)
+		self.Bind(wx.EVT_MENU, self.doUndo, id=113)
+		self.Bind(wx.EVT_MENU, self.doRedo, id=114)
 		self.Bind(wx.EVT_MENU, self.OnSelectAll, id=110)
 		self.Bind(wx.EVT_MENU, self.ToggleStatusBar, id=111)
 		self.Bind(wx.EVT_MENU, self.OnAbout, id=112)
@@ -141,10 +158,14 @@ class Beditor(wx.Frame):
 		self.toolbar.AddSimpleTool(802, wx.Bitmap('/usr/share/muktalekhaa/icons/document-open.png'), 'Open', '')
 		self.toolbar.AddSimpleTool(803, wx.Bitmap('/usr/share/muktalekhaa/icons/document-save.png'), 'Save', '')
 		self.toolbar.AddSeparator()
-
+		
 		self.toolbar.AddSimpleTool(804, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-cut.png'), 'Cut', '')
 		self.toolbar.AddSimpleTool(805, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-copy.png'), 'Copy', '')
 		self.toolbar.AddSimpleTool(806, wx.Bitmap('/usr/share/muktalekhaa/icons/edit-paste.png'), 'Paste', '')
+		self.toolbar.AddSeparator()
+		
+		self.toolbar.AddSimpleTool(808, wx.Bitmap('/usr/share/muktalekhaa/icons/undo.png'), 'Undo (CTRL+Z)', '')
+		self.toolbar.AddSimpleTool(809, wx.Bitmap('/usr/share/muktalekhaa/icons/redo.png'), 'Redo (CTRL+Y)', '')
 		self.toolbar.AddSeparator()
 
 		self.toolbar.AddSimpleTool(501, wx.Bitmap('/usr/share/muktalekhaa/icons/fontsel-22.png'), 'Select Font', '')
@@ -159,7 +180,10 @@ class Beditor(wx.Frame):
 		self.toolbar.AddSimpleTool(807, wx.Bitmap('/usr/share/muktalekhaa/icons/process-stop.png'), 'Exit', '')
 		
 		self.toolbar.Realize()
-
+		
+		self.toolbar.EnableTool( 808, False)
+		self.toolbar.EnableTool( 809, False)
+		
 		self.Bind(wx.EVT_TOOL, self.NewApplication, id=801)
 		self.Bind(wx.EVT_TOOL, self.OnOpenFile, id=802)
 		self.Bind(wx.EVT_TOOL, self.OnSaveFile, id=803)
@@ -178,6 +202,10 @@ class Beditor(wx.Frame):
 		self.text.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 		self.text.Bind(wx.EVT_CHAR, self.conv)
 		self.text.Bind(wx.EVT_CHAR, self.PreviewConv)
+		
+		self.Bind(wx.EVT_TOOL, self.doUndo, id = 808)
+		self.Bind(wx.EVT_TOOL, self.doRedo, id = 809)
+		self.text.Bind(wx.EVT_CHAR, self.populateStore)
 		
 
 		self.Bind(wx.EVT_CLOSE, self.QuitApplication)
@@ -335,6 +363,7 @@ class Beditor(wx.Frame):
 
 	def StatusBar(self):
 		self.statusbar = self.CreateStatusBar()
+		self.statusbar.SetStatusStyles([wx.SB_VERTICAL])
 		self.statusbar.SetFieldsCount(3)
 		self.statusbar.SetStatusWidths([-13, -3, -2])
 		
@@ -376,7 +405,7 @@ class Beditor(wx.Frame):
 		
 		info.SetIcon(wx.Icon('/usr/share/muktalekhaa/icons/logo.png', wx.BITMAP_TYPE_PNG))
 		info.SetName('Muktalekhaa ')
-		info.SetVersion('1.0')
+		info.SetVersion('1.2')
 		info.SetDescription(description)
 		info.SetCopyright('(C) 2007 Sayan \"Riju\" Chakrabarti <sayan.marchlinux@gmail.com>')
 		info.SetWebSite('http://code.google.com/p/muktalekhaa/')
@@ -440,6 +469,37 @@ class Beditor(wx.Frame):
 			self.word = ''
 			
 		event.Skip()
+		
+	def populateStore(self, event):
+		keycode = event.GetKeyCode()
+		if keycode == wx.WXK_SPACE:
+			event.Skip()
+			stockUndo.append(self.text.GetValue())
+			self.toolbar.EnableTool( 808, True)
+			if len(stockUndo) > depth:
+				del stockUndo[0]
+					
+		event.Skip()
+			
+	def doUndo(self, event):
+		stockRedo.append(self.text.GetValue())
+		if len(stockUndo) == 1:
+			self.toolbar.EnableTool( 808, False)
+		a = stockUndo.pop()
+		self.text.Clear()
+		self.text.WriteText(a)
+		self.toolbar.EnableTool(809, True)
+		
+	def doRedo(self, event):
+		
+		stockUndo.append(self.text.GetValue())
+		if len(stockRedo) == 1:
+			self.toolbar.EnableTool( 809, False)
+		
+		a = stockRedo.pop()
+		self.text.Clear()
+		self.text.WriteText(a)
+		self.toolbar.EnableTool(808, True)
 	
 	###### converting to bangla using engine  ##########
 	def conv(self, event):
