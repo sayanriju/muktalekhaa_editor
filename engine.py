@@ -49,7 +49,7 @@ def roman2beng(intext):
 	intext = mreplace(intext, 'aaY', 'w'); ## SPECIAL !! 'অ্যা' (No Specific Keymap for this!)
 
 	
-	intext = mreplace(intext, 'tw', 'W');  ## khandyot twa
+#	intext = mreplace(intext, 'tw', 'W');  ## khandyot twa
 	intext = mreplace(intext, 'ng', 'M');  ## ং
 	intext = mreplace(intext, 'nG', 'G'); ## ঙ
 	intext = mreplace(intext, 'NG', 'J');  ## ঞ
