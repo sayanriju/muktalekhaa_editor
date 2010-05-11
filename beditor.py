@@ -286,7 +286,7 @@ class Beditor(wx.Frame):
 
 	def OnSaveAsFile(self, event):
 		wcd='All files(*)|*|Editor files (*.ef)|*.ef|'
-		dir = os.getcwd()
+		dir = os.getenv("HOME") #os.getcwd()
 		save_dlg = wx.FileDialog(self, message='Save file as...', defaultDir=dir, defaultFile='',
 						wildcard=wcd, style=wx.SAVE | wx.OVERWRITE_PROMPT)
 		if save_dlg.ShowModal() == wx.ID_OK:
@@ -297,8 +297,10 @@ class Beditor(wx.Frame):
 				text = self.text.GetValue()
 				file.write(text.encode('utf-8'))
 				file.close()
-				self.last_name_saved = os.path.basename(path)
-				self.statusbar.SetStatusText(self.last_name_saved + ' saved', 0)
+				## Thanks Sucharit <sucharit.sarkar@gmail.com>
+				self.last_name_saved = path
+				self.statusbar.SetStatusText(os.path.basename(self.last_name_saved) + ' saved', 0)
+				##
 				self.modify = False
 				self.statusbar.SetStatusText('', 1)
 				self.SetTitle(window_title + path)
